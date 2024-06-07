@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Decryption</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div th:replace="navbar :: navbar"></div>
+
+<div class="main-content">
+    <div class="content">
+        <div class="side">
+            <div class="heading-large">
+                <h2>What is</h2>
+            </div>
+            <div class="heading-small">Decryption?</div>
+        </div>
+        <div class="side">
+            <h2>It is a process that transforms encrypted information into its original format.</h2>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="step-list">
+            <h2>Step 1. Click on the button to select the image to be decrypted</h2>
+        </div>
+        <section class="card">
+            <form id="decryptForm" method="post" enctype="multipart/form-data" th:action="@{/decrypt}">
+                <h3>Upload Files</h3>
+                <div class="drop_box">
+                    <header>
+                        <h4>Select File here</h4>
+                    </header>
+                    <p>Files Supported: JPG, JPEG, PNG , BMP</p>
+                    <input type="file" name="file" hidden accept=".jpg,.jpeg,.png,.bmp" id="fileID" onchange="updateFileName()">
+                    <button class="btn" onclick="document.getElementById('fileID').click(); return false;">Choose File</button>
+                    <p id="fileName">File isn't chosen</p>
+                </div>
+                <button class="btn" type="submit">Decode</button>
+            </form>
+        </section>
+        <div class="image-frame">
+            <img id="output" alt="Image preview will appear here">
+        </div>
+    </div>
+    <div class="step-list">
+          <h2>Step 2. Below is the embedded message from the image</h2>
+    </div>
+
+    <textarea class="message-input" placeholder="Here's the message" id="message" th:value="${message}"></textarea>
+
+</div>
+
+<div th:replace="navbar :: footer"></div>
+
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>
+
+

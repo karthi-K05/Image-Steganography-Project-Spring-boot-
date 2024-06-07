@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steganography</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+<div th:replace="navbar :: navbar"></div>
+
+<div class="container">
+    <div class="card">
+        <h1>Welcome to Steganography Tool</h1>
+        <p>Steganography is the practice of concealing a file, message, image, or video within another file, message, image, or video. The word steganography comes from the Greek words steganos (meaning hidden or covered) and graphein (meaning to write).</p>
+    </div>
+
+    <div class="index-buttons">
+        <a th:href="@{/encryption}" class="btn">Encryption</a>
+        <a th:href="@{/decryption}" class="btn">Decryption</a>
+    </div>
+</div>
+
+<div th:replace="navbar :: footer"></div>
+</body>
+
+</html>

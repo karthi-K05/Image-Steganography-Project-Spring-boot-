@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Image</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="navbar" th:replace="navbar :: navbar"></div>
+
+<div class="main-content">
+
+    <div class="content">
+
+        <div class="side">
+
+            <div class="heading-large">
+                <h2>What is</h2>
+            </div>
+
+            <div class="heading-small">Encryption?</div>
+
+        </div>
+
+        <div class="side">
+            <h2>It is a security tool that scrambles data into an unreadable code.</h2>
+        </div>
+
+    </div>
+
+    <form id="myForm" method="post" enctype="multipart/form-data" th:action="@{/encrypt}">
+        <div class="container">
+
+            <div class="step-list">
+                <h2>Step 1. Click on the button to select the image to be encrypted</h2>
+            </div>
+
+            <section class="card">
+                    <h3>Upload Files</h3>
+                    <div class="drop_box">
+                        <header>
+                            <h4>Select File here</h4>
+                        </header>
+                        <p>Files Supported: JPG, JPEG, PNG , BMP</p>
+                        <input type="file" name="file" hidden accept=".jpg,.jpeg,.png,.bmp" id="fileID" onchange="updateFileName()">
+                        <button class="btn" onclick="document.getElementById('fileID').click(); return false;">Choose File</button>
+                        <p id="fileName">File isn't chosen</p>
+                    </div>
+            </section>
+
+            <div class="image-frame">
+                <img id="output" alt="Image preview will appear here">
+            </div>
+
+        </div>
+
+        <div class="step-list">
+            <h2>Step 2. Now type the text to be embedded in the image</h2>
+        </div>
+
+        <textarea class="message-input" name="message" placeholder="Type the message here"></textarea>
+        <section>  </section>
+        <button class="btn" type="submit">Upload</button>
+        <a class="a-btn" th:href="@{/Images/my-image.png}" download>Download Image</a>
+    </form>
+
+
+</div>
+
+<div th:replace="navbar :: footer"></div>
+
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>
