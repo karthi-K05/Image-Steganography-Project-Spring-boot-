@@ -24,7 +24,6 @@ public class EncryptionController {
     @Autowired
     private ImageUploadHelper imageUploadHelper;
     @PostMapping("/encrypt")
-    @ResponseBody
     public String uploadImage(@RequestParam("file") MultipartFile file, @RequestParam String message) {
 
         try {
