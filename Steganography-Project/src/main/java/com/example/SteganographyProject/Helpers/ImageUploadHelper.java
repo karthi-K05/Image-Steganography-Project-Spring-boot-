@@ -10,7 +10,7 @@ import java.nio.file.StandardCopyOption;
 
 @Component
 public class ImageUploadHelper {
-    public final String UPLOAD_DIR = "C:\\Users\\karthik\\OneDrive\\Desktop\\Steganography-Project\\src\\main\\resources\\static\\Images";
+   public final String UPLOAD_DIR = "src//main//resources//static//Images";
 
     public boolean uploadFile(MultipartFile multipartFile){
         boolean f = false;
