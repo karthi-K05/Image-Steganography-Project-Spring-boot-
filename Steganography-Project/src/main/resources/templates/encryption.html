@@ -43,7 +43,7 @@
                             <h4>Select File here</h4>
                         </header>
                         <p>Files Supported: JPG, JPEG, PNG , BMP</p>
-                        <input type="file" name="file" hidden accept=".jpg,.jpeg,.png,.bmp" id="fileID" onchange="updateFileName()">
+                            <input type="file" name="file" hidden accept=".jpg,.jpeg,.png,.bmp" id="fileID" onchange="previewImage()">
                         <button class="btn" onclick="document.getElementById('fileID').click(); return false;">Choose File</button>
                         <p id="fileName">File isn't chosen</p>
                     </div>
@@ -57,15 +57,24 @@
 
         <div class="step-list">
             <h2>Step 2. Now type the text to be embedded in the image</h2>
+            <textarea class="message-input" name="message" placeholder="Type the message here"></textarea>
+            <section>  </section>
+            <button class="btn" type="button" onclick="uploadImage()">Upload</button>
         </div>
-
-        <textarea class="message-input" name="message" placeholder="Type the message here"></textarea>
-        <section>  </section>
-        <button class="btn" type="submit">Upload</button>
-        <a class="a-btn" th:href="@{/Images/my-image.png}" download>Download Image</a>
+    
     </form>
 
+</div>
 
+<div id="popup-overlay" onclick="closePopup()"></div>
+
+<div id="popup" class="popup">
+    <span class="close" onclick="closePopup()">&times;</span>
+    <img id="popup-image" alt="Embedded Image">
+    <div class="popup-buttons">
+        <a id="download-link" class="download-btn" download="encrypted-image.png">Download Image</a>
+        <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+    </div>
 </div>
 
 <div th:replace="navbar :: footer"></div>
