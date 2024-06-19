@@ -17,6 +17,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class EncryptionController {
@@ -24,37 +27,36 @@ public class EncryptionController {
     @Autowired
     private ImageUploadHelper imageUploadHelper;
     @PostMapping("/encrypt")
-    public String uploadImage(@RequestParam("file") MultipartFile file, @RequestParam String message) {
-
+    @ResponseBody
+     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam String message) {
+        Map<String, String> response = new HashMap<>();
         try {
-
             if (file.isEmpty()) {
-                return "Please select a file to upload";
+                response.put("error", "Please select a file to upload");
+                return ResponseEntity.badRequest().body(response);
             }
 
             BufferedImage img = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+            MultipartFile embeddedFile = embedMessage(img, message);
 
-            boolean f = imageUploadHelper.uploadFile(embedMessage(img, message));
-            if (f) {
-
-                return "encryption";
+            if (embeddedFile != null) {
+                byte[] imageBytes = embeddedFile.getBytes();
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                response.put("base64Image", base64Image);
+                return ResponseEntity.ok(response);
             }
-
-//            model.addAttribute("message",message);
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-            return "encryption";
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("error", "An error occurred while processing the image");
         }
-
+        return ResponseEntity.status(500).body(response);
+    }
     private MultipartFile embedMessage(BufferedImage img, String mess) throws IOException {
         int messageLength = mess.length();
 
-        int imageWidth = img.getWidth(), imageHeight = img.getHeight(),
-                imageSize = imageWidth * imageHeight;
+        int imageWidth = img.getWidth(), imageHeight = img.getHeight(), imageSize = imageWidth * imageHeight;
         if (messageLength * 8 + 32 > imageSize) {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some went wrong");
+            return null;
         }
         embedInteger(img, messageLength, 0, 0);
 
@@ -68,28 +70,12 @@ public class EncryptionController {
         byte[] imageByteArray = outputStream.toByteArray();
 
         String originalFilename = "my-image.png"; // Set the original filename
-
         String contentType = "image/png"; // Set the content type (or "image/jpeg" for JPG)
 
         // Create a MultipartFile instance from the byte array
         MultipartFile multipartFile = new CustomMultipartFile(imageByteArray, originalFilename, contentType);
         return multipartFile;
     }
-//    private void embedMessage(BufferedImage img, String mess) {
-//        int messageLength = mess.length();
-//
-//        int imageWidth = img.getWidth(), imageHeight = img.getHeight(),
-//                imageSize = imageWidth * imageHeight;
-//        if(messageLength * 8 + 32 > imageSize) {
-//            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some went wrong");
-//            return;
-//        }
-//        embedInteger(img, messageLength, 0, 0);
-//
-//        byte b[] = mess.getBytes();
-//        for(int i=0; i<b.length; i++)
-//            embedByte(img, b[i], i*8+32, 0);
-//    }
 
     private void embedInteger(BufferedImage img, int n, int start, int storageBit) {
         int maxX = img.getWidth(), maxY = img.getHeight(),
@@ -104,7 +90,7 @@ public class EncryptionController {
         }
     }
 
-    //     embedByte(BufferedImage img, byte b, int start, int storageBit) method embeds a single byte (b) into the image (img) starting at a specific pixel (start) and using a specific bit position (storageBit) in the RGB values.
+//     embedByte(BufferedImage img, byte b, int start, int storageBit) method embeds a single byte (b) into the image (img) starting at a specific pixel (start) and using a specific bit position (storageBit) in the RGB values.
 //     It iterates over the pixels of the image, modifying one bit of one color channel per pixel to encode each bit of the byte
     private void embedByte(BufferedImage img, byte b, int start, int storageBit) {
         int maxX = img.getWidth(), maxY = img.getHeight(),
@@ -118,31 +104,8 @@ public class EncryptionController {
             }
         }
     }
-
-//     saveImage() method prompts the user to choose a location and filename for saving the modified image (embeddedImage).
-//     It ensures that the saved file has an appropriate image file extension.
-//     It writes the embeddedImage to a file at the chosen location.
-
-//    private void saveImage() {
-//        if(embeddedImage == null) {
-//            JOptionPane.showMessageDialog(this, "No message has been embedded!",
-//                    "Nothing to save", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//        java.io.File f = showFileDialog(false);
-//        String name = f.getName();
-//        String ext = name.substring(name.lastIndexOf(".")+1).toLowerCase();
-//        if(!ext.equals("png") && !ext.equals("bmp") &&   !ext.equals("dib")) {
-//            ext = "png";
-//            f = new java.io.File(f.getAbsolutePath()+".png");
-//        }
-//        try {
-//            if(f.exists()) f.delete();
-//            ImageIO.write(embeddedImage, ext.toUpperCase(), f);
-//        } catch(Exception ex) { ex.printStackTrace(); }
-//    }
-
-    //     getBitValue(int n, int location) utility method retrieves the value (0 or 1) of a specific bit from an integer (n) at a given location (location).
+    
+//     getBitValue(int n, int location) utility method retrieves the value (0 or 1) of a specific bit from an integer (n) at a given location (location).
     private int getBitValue(int n, int location) {
         int v = n & (int) Math.round(Math.pow(2, location));
         return v==0?0:1;
