@@ -1,7 +1,7 @@
 package com.example.SteganographyProject.Controllers;
 
 import com.example.SteganographyProject.Helpers.CustomMultipartFile;
-import com.example.SteganographyProject.Helpers.ImageUploadHelper;
+//import com.example.SteganographyProject.Helpers.ImageUploadHelper;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +24,8 @@ import java.util.Map;
 @Controller
 public class EncryptionController {
 
-    @Autowired
-    private ImageUploadHelper imageUploadHelper;
+//    @Autowired
+//    private ImageUploadHelper imageUploadHelper;
     @PostMapping("/encrypt")
     @ResponseBody
      public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam String message) {
